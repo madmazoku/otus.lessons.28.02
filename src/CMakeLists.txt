@@ -8,11 +8,6 @@ else()
     set(CMAKE_BUILD_TYPE Debug)
 endif()
 
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME ON)
-
-find_package(Boost COMPONENTS unit_test_framework timer REQUIRED)
 find_package(Threads REQUIRED)
 
 set(CPACK_GENERATOR DEB)
@@ -30,37 +25,22 @@ set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} -std=c++11 -pthread"
 
 include(CPack)
 
-enable_testing()
-
 # local
 configure_file(in.version.h version.h)
 
 add_executable(ymr main.cpp)
 
-add_executable(ymr_test test.cpp)
-
-set_target_properties(ymr ymr_test PROPERTIES
+set_target_properties(ymr PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
     COMPILE_OPTIONS -Wpedantic -Wall -Wextra
 )
 
-set_target_properties(ymr ymr_test PROPERTIES
-    COMPILE_DEFINITIONS BOOST_TEST_STATIC_LINK
-    INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
-)
-
 target_link_libraries(ymr
-    ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT}
-)
-
-target_link_libraries(ymr_test
-    ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT}
+    ${CMAKE_THREAD_LIBS_INIT}
 )
 
 install(TARGETS ymr
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
 )
-    
-add_test(ymr ymr_test)
