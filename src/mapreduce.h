@@ -78,8 +78,8 @@ void mapreduce(const std::string& fnin, const std::string& fnout, size_t M, size
         start += length ;
     }
 
-    for(auto& m : mappers)
-        m.join();
+    for(size_t m = n-1; m < M; ++m)
+        mappers[m].join();
 
     std::mutex lmutex;
     strings_t lines;
