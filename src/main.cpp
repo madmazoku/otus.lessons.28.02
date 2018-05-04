@@ -13,6 +13,15 @@ int main(int argc, char** argv)
     }
 
     std::string src  = argv[1];
+
+    if(src == "-") {
+        src = "data.tmp";
+        std::ofstream out(src);
+        std::string line;
+        while(std::getline(std::cin, line))
+            out << line << std::endl;
+    }
+
     size_t M = std::atol(argv[2]);
     size_t R = std::atol(argv[3]);
 
