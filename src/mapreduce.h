@@ -91,20 +91,10 @@ void mapreduce(const std::string& fnin, const std::string& fnout, size_t M, size
             std::sort(b, e, [](kv_t a, kv_t b) {
                 return std::get<0>(a) < std::get<0>(b);
             });
-            strings_t ls, local_ls;
-            kvs_t kvs;
-            while(b != e) {
-                auto n = b;
-                do {
-                    ++n;
-                } while(n != e && std::get<0>(*b) == std::get<0>(*n));
-                std::copy(b, n, std::back_inserter(kvs));
-                reduce(kvs, local_ls);
-                std::copy(local_ls.begin(), local_ls.end(), std::back_inserter(ls));
-                kvs.clear();
-                local_ls.clear();
-                b = n;
-            }
+
+            strings_t ls;
+            reduce(std::get<1>(r), ls);
+
             std::lock_guard<std::mutex> llock(lmutex);
             std::copy(ls.begin(), ls.end(), std::back_inserter(lines));
         });
