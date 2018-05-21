@@ -37,7 +37,7 @@ int main(int argc, char** argv)
             auto itc = it;
             const std::string& key = std::get<0>(*itc);
 
-            it = std::find_if_not(itc, kvs.end(), [&key](const kv_t& kv) {
+            it = std::find_if_not(itc, kvs.end(), [key](const kv_t& kv) {
                 return key == std::get<0>(kv);
             });
 
