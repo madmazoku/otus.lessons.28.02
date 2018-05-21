@@ -37,11 +37,11 @@ int main(int argc, char** argv)
             auto itc = it;
             const std::string& key = std::get<0>(*itc);
 
-            it = std::find_if_not(itc, kvs.end(), [key](const kv_t& kv) {
+            it = std::find_if_not(++itc, kvs.end(), [key](const kv_t& kv) {
                 return key == std::get<0>(kv);
             });
 
-            if(it - itc > 1 && key.length() > dup_len)
+            if(itc != it && key.length() > dup_len)
                 dup_len = key.length();
 
         }
