@@ -35,12 +35,15 @@ int main(int argc, char** argv)
         auto it = kvs.begin();
         while(it != kvs.end()) {
             auto itc = it;
-            do {
-                ++it;
-            } while(it != kvs.end() && std::get<0>(*itc) == std::get<0>(*it));
+            const std::string& key = std::get<0>(*itc);
 
-            if(it - itc > 1 && std::get<0>(*itc).length() > dup_len)
-                dup_len = std::get<0>(*itc).length();
+            it = std::find_if_not(itc, kvs.end(), [&key](const kv_t& kv) {
+                return key == std::get<0>(kv);
+            });
+
+            if(it - itc > 1 && key.length() > dup_len)
+                dup_len = key.length();
+
         }
         lines.push_back(std::to_string(dup_len + 1));
     };
